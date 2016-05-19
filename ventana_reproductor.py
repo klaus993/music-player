@@ -1,7 +1,6 @@
 import pyglet
 from pyglet.window import key
 #comentario test seblaz
-#comentario prueba smartgit
 class VentanaReproductor(pyglet.window.Window):
 	""" Ventana del reproductor, que permite controlarlo, modificar la cola de reproduccion y 
 	muestra la informacion de la cancion actual."""

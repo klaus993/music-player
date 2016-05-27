@@ -1,6 +1,7 @@
 import pyglet.media as media
 from cola_reproduccion import ColaDeReproduccion
 
+
 class Reproductor(media.Player):
     """ Wrapper de pyglet.media.Player, adaptado para usar una ColaDeReproduccion en lugar de la 
     cola interna. """
@@ -60,7 +61,7 @@ class Reproductor(media.Player):
         interna del reproductor."""
         if cancion:
             self.queue(media.load(cancion.obtener_ruta()))
-        
+
     def next_source(self):
         """ Metodo llamado automaticamente al finalizar una cancion. Avanza en la cola de 
         reproduccion, carga la cancion en la cola interna y dispara un evento on_eos.

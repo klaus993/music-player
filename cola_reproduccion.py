@@ -4,12 +4,13 @@ from cancion import Cancion
 
 EXTENSIONES_ACEPTADAS = ("wav", "mp3", "flac", "ogg", "wma")
 
+
 class ColaDeReproduccion:
     """Clase que representa la cola de reproduccion del reproductor. Permite agregar y remover 
     canciones, ademas de poder hacer y deshacer estas acciones. Las canciones se guardan en la 
     cola como objetos de clase Cancion."""
-    
-    def __init__(self, lista_canciones = []):
+
+    def __init__(self, lista_canciones=[]):
         """ Recibe una lista de objetos de clase Cancion con las canciones que se quieren 
         reproducir."""
         raise NotImplementedError()

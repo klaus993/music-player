@@ -9,11 +9,13 @@ from reproductor import Reproductor
 from cola_reproduccion import ColaDeReproduccion, EXTENSIONES_ACEPTADAS
 from cancion import Cancion
 
+
 def agregar_canciones(cola, ruta_directorio):
     """ Agrega a la cola las canciones que se encuentran en el directorio y en los directorios
     que se encuentran en el, recursivamente. Las extensiones aceptadas son las que se listan en 
     ColaDeReproduccion."""
     raise NotImplementedError()
+
 
 def main():
     cola = ColaDeReproduccion()
@@ -25,7 +27,7 @@ def main():
     reproductor = Reproductor(cola)
     ventana_reproductor = VentanaReproductor(reproductor)
     ventana_reproductor.actualizar()
-    
+
     pyglet.app.run()
     sys.exit(0)
 

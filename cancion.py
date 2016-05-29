@@ -8,17 +8,15 @@ class Cancion:
     def __init__(self, ruta, titulo="Cancion desconocida", artista="Autor desconocido"):
         # Usar TinyTag para obtener la informacion de la cancion, sobreescribir con lo pasado por 
         # parametro solo si la informacion no se encuentra disponible
-        raise NotImplementedError()
-	
-	self.ruta=ruta
-	try:
-		tag = TinyTag.get(ruta)
-		self.titulo=tag.title
-		self.artista=tag.artist
-	except Exception as e:
-		print("Error"+str(e))
-		self.titulo=titulo
-		self.artista=artista
+        self.ruta = ruta
+        try:
+            tag = TinyTag.get(ruta)
+            self.titulo = tag.title
+            self.artista = tag.artist
+        except Exception as e:
+            print("Error: " + str(e))
+            self.titulo = titulo
+            self.artista = artista
 
     def obtener_ruta(self):
         """ Devuelve la ruta del archivo de la cancion."""

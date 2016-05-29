@@ -1,4 +1,4 @@
-from tinytag import TinyTag
+from tinytag import TinyTag, TinyTagException
 
 
 class Cancion:
@@ -13,7 +13,7 @@ class Cancion:
             tag = TinyTag.get(ruta)
             self.titulo = tag.title
             self.artista = tag.artist
-        except Exception as e:
+        except (TinyTagException, LookupError, OSError) as e:
             print("Error: " + str(e))
             self.titulo = titulo
             self.artista = artista

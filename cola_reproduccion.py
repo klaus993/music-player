@@ -1,5 +1,6 @@
 import os
 from cancion import Cancion
+from cola import Cola
 
 EXTENSIONES_ACEPTADAS = ("wav", "mp3", "flac", "ogg", "wma")
 
@@ -12,12 +13,14 @@ class ColaDeReproduccion:
     def __init__(self, lista_canciones=[]):
         """ Recibe una lista de objetos de clase Cancion con las canciones que se quieren 
         reproducir."""
-        raise NotImplementedError()
+        self.lista_canciones = Cola()
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 
         hay canciones cargadas en la cola."""
-        raise NotImplementedError()
+        if self.lista_canciones.esta_vacia():
+            return None
+        return self.lista_canciones.ver_primero()
 
     def cancion_siguiente(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion siguiente en la cola, 

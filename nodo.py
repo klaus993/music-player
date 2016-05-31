@@ -1,7 +1,8 @@
 class _Nodo:
     """Clase que modela nodos de una lista enlazada"""
-    def __init__(self, dato=None, prox=None):
+    def __init__(self, ant=None, dato=None, prox=None):
         self.dato = dato
+        self.ant = ant
         self.prox = prox
 
     def __str__(self):

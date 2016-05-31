@@ -1,6 +1,7 @@
 import os
 from cancion import Cancion
 from cola import Cola
+from pila import Pila
 
 EXTENSIONES_ACEPTADAS = ("wav", "mp3", "flac", "ogg", "wma")
 
@@ -10,10 +11,10 @@ class ColaDeReproduccion:
     canciones, ademas de poder hacer y deshacer estas acciones. Las canciones se guardan en la 
     cola como objetos de clase Cancion."""
 
-    def __init__(self, lista_canciones=[]):
+    def __init__(self, lista_canciones=Cola()):
         """ Recibe una lista de objetos de clase Cancion con las canciones que se quieren 
         reproducir."""
-        self.lista_canciones = Cola()
+        self._aux = Pila()
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 

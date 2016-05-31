@@ -15,6 +15,10 @@ class ColaDeReproduccion:
         """ Recibe una lista de objetos de clase Cancion con las canciones que se quieren 
         reproducir."""
         self._aux = Pila()
+        cola = Cola()
+        for i in lista_canciones:
+            cola.encolar(i)
+        self.cola_canciones = cola
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 
@@ -26,17 +30,26 @@ class ColaDeReproduccion:
     def cancion_siguiente(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion siguiente en la cola, 
         o None si no hay mas canciones."""
-        raise NotImplementedError()
+        if self.cola_canciones.esta_vacia():
+            return None
+        return self.cola_canciones.ver_primero()
 
     def cancion_anterior(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion anterior en la cola, 
         o None si no hay canciones en la misma o la actual es la primera de la cola."""
+        if self.cola_canciones.esta_vacia() or self.cola_canciones.ver_primero() == self.cola_canciones.ver_ultimo():
+            return None
         raise NotImplementedError()
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
-        raise NotImplementedError()
+        cancion = Cancion(ruta_cancion)
+        try:
+            self.cola_canciones.encolar(cancion)
+            return True
+        except:
+            return False
 
     def remover_cancion(self, ruta_cancion):
         """ Remueve una Cancion de la cola a partir de su ruta. Devuelve True si se removio 

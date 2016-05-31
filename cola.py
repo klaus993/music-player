@@ -58,3 +58,6 @@ class Cola:
 
     def ver_primero(self):
         return self.prim.dato
+
+    def ver_ultimo(self):
+        return self.ult.dato

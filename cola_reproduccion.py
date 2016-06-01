@@ -1,5 +1,5 @@
 import os
-from cancion import Cancion
+from cancion import Cancion, TinyTagException
 from cola import Cola
 from pila import Pila
 
@@ -11,7 +11,10 @@ class ColaDeReproduccion:
     canciones, ademas de poder hacer y deshacer estas acciones. Las canciones se guardan en la 
     cola como objetos de clase Cancion."""
 
-    def __init__(self, lista_canciones=Cola()):
+    AGREGADA = 1
+    REMOVIDA = 0
+
+    def __init__(self, lista_canciones=[]):
         """ Recibe una lista de objetos de clase Cancion con las canciones que se quieren 
         reproducir."""
         self._aux = Pila()
@@ -19,6 +22,8 @@ class ColaDeReproduccion:
         for i in lista_canciones:
             cola.encolar(i)
         self.cola_canciones = cola
+        self.ultima_accion = None
+        self.lista_canciones = lista_canciones
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 
@@ -32,7 +37,7 @@ class ColaDeReproduccion:
         o None si no hay mas canciones."""
         if self.cola_canciones.esta_vacia():
             return None
-        return self.cola_canciones.ver_primero()
+        raise NotImplementedError()
 
     def cancion_anterior(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion anterior en la cola, 
@@ -44,16 +49,25 @@ class ColaDeReproduccion:
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
-        cancion = Cancion(ruta_cancion)
         try:
+            cancion = Cancion(ruta_cancion)
             self.cola_canciones.encolar(cancion)
+            self.ultima_accion = self.AGREGADA
             return True
-        except:
+        except (TinyTagException, LookupError, OSError):
             return False
 
     def remover_cancion(self, ruta_cancion):
         """ Remueve una Cancion de la cola a partir de su ruta. Devuelve True si se removio 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
+        try:
+            cancion = Cancion(ruta_cancion)
+            desencolada = self.cola_canciones.desencolar()
+            self._aux.apilar(desencolada)
+            self.ultima_accion = self.REMOVIDA
+            return True
+        except (TinyTagException, LookupError, OSError):
+            return False
         raise NotImplementedError()
 
     def deshacer_modificacion(self):
@@ -70,4 +84,4 @@ class ColaDeReproduccion:
         """ Devuelve una lista con las siguientes n canciones. Si en la cola de reproduccion 
         quedan menos canciones que las pedidas, la lista contendra menos elementos que los 
         pedidos."""
-        return None
+        raise NotImplementedError()

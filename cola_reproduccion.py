@@ -70,4 +70,4 @@ class ColaDeReproduccion:
         """ Devuelve una lista con las siguientes n canciones. Si en la cola de reproduccion 
         quedan menos canciones que las pedidas, la lista contendra menos elementos que los 
         pedidos."""
-        raise NotImplementedError()
+        return None

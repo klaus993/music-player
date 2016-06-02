@@ -2,6 +2,8 @@ import os
 from cancion import Cancion, TinyTagException
 from cola import Cola
 from pila import Pila
+from lista_enlazada import ListaEnlazada
+
 
 EXTENSIONES_ACEPTADAS = ("wav", "mp3", "flac", "ogg", "wma")
 
@@ -17,42 +19,47 @@ class ColaDeReproduccion:
     def __init__(self, lista_canciones=[]):
         """ Recibe una lista de objetos de clase Cancion con las canciones que se quieren 
         reproducir."""
-        self._aux = Pila()
-        cola = Cola()
-        for i in lista_canciones:
-            cola.encolar(i)
-        self.cola_canciones = cola
-        self.ultima_accion = None
-        self.lista_canciones = lista_canciones
+        lista = ListaEnlazada()
+        for cancion in lista_canciones:
+            lista.insert(cancion)
+        self.lista_canciones = lista
+        self.acciones_tomadas = Pila()
+        self.actual=0
+        #self.ultima_accion = None
+        #self.lista_canciones = lista_canciones
+
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 
         hay canciones cargadas en la cola."""
         if self.lista_canciones.esta_vacia():
             return None
-        return self.lista_canciones.ver_primero()
+        #return self.cola_canciones.ver_primero()
+        return self.lista_canciones.get_elemento(self.actual)
 
     def cancion_siguiente(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion siguiente en la cola, 
         o None si no hay mas canciones."""
-        if self.cola_canciones.esta_vacia():
+        if self.lista_canciones.esta_vacia():
             return None
-        raise NotImplementedError()
+        return self.lista_canciones.get_elemento(self.actual+1)
 
     def cancion_anterior(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion anterior en la cola, 
         o None si no hay canciones en la misma o la actual es la primera de la cola."""
-        if self.cola_canciones.esta_vacia() or self.cola_canciones.ver_primero() == self.cola_canciones.ver_ultimo():
+        #if self.lista_canciones.esta_vacia() or self.lista_canciones.ver_primero() == self.lista_canciones.ver_ultimo():
+        if self.lista_canciones.esta_vacia():
             return None
-        raise NotImplementedError()
+        return self.lista_canciones.get_elemento(self.actual+1)
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
         try:
             cancion = Cancion(ruta_cancion)
-            self.cola_canciones.encolar(cancion)
-            self.ultima_accion = self.AGREGADA
+            self.lista_canciones.insert(cancion)
+            #self.ultima_accion = self.AGREGADA
+            self.acciones_tomadas.apilar((cancion, AGREGADA))
             return True
         except (TinyTagException, LookupError, OSError):
             return False
@@ -62,9 +69,11 @@ class ColaDeReproduccion:
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
         try:
             cancion = Cancion(ruta_cancion)
-            desencolada = self.cola_canciones.desencolar()
-            self._aux.apilar(desencolada)
-            self.ultima_accion = self.REMOVIDA
+            #desencolada = self.cola_canciones.desencolar()
+            #self._aux.apilar(desencolada)
+            #self.ultima_accion = self.REMOVIDA
+            posicion=self.lista_canciones.index(cancion)
+            self.lista_canciones.pop(posicion)
             return True
         except (TinyTagException, LookupError, OSError):
             return False

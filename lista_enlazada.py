@@ -68,10 +68,13 @@ class ListaEnlazada:
         self.len -= 1
         return dato
 
-    def insert(self, i, x):
+    def insert(self, x, i=None):
         """Inserta el elemento x en la posición i.
-        Si la posición es inválida, levanta IndexError
+        Si no se especifica una posicion, se inserta al final.
+        Si la posición es inválida, levanta IndexError.
         """
+        if i==None:
+            i=self.len
         if i < 0 or i > self.len:
             raise IndexError("Posición inválida")
         nuevo = _Nodo(x)
@@ -88,3 +91,28 @@ class ListaEnlazada:
             nuevo.prox = n_ant.prox
             n_ant.prox = nuevo
         self.len += 1
+
+    def get_elemento(self, i):
+        """Deuelve el elemento de la posición i.
+        Si la posición es inválida, levanta IndexError.
+        """
+        if i<0 or i>self.len-1:
+            raise IndexError("Posición inválida")
+        if i==0:
+            return self.prim.dato
+        nodo = self.prim
+        for pos in range(1, i):
+            nodo = nodo.prox
+        return nodo.dato
+
+    def esta_vacia(self):
+        """Devuelve True si la lista esta vacia y False si contiene algun elemento"""
+        return self.len==0
+
+    def index(self, x):
+        """Recibe un elemento x y devuelve un entero con la primera posición que encuentra de dicho elemento."""
+        i=0
+        for nodo in self:
+            if nodo==x:
+                return i
+            i+=1

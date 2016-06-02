@@ -29,7 +29,7 @@ class Pila:
         return self.items.prim is None
 
     def apilar(self, x):
-        self.items.insert(0, x)
+        self.items.insert(x, 0)
 
     def desapilar(self):
         if self.esta_vacia():

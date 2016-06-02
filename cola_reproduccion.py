@@ -58,7 +58,6 @@ class ColaDeReproduccion:
         try:
             cancion = Cancion(ruta_cancion)
             self.lista_canciones.insert(cancion)
-            #self.ultima_accion = self.AGREGADA
             self.acciones_tomadas.apilar((cancion, self.AGREGADA))
             return True
         except (TinyTagException, LookupError, OSError):
@@ -69,13 +68,12 @@ class ColaDeReproduccion:
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
         try:
             cancion = Cancion(ruta_cancion)
-            #desencolada = self.cola_canciones.desencolar()
-            #self._aux.apilar(desencolada)
-            #self.ultima_accion = self.REMOVIDA
             posicion = self.lista_canciones.index(cancion)
             self.lista_canciones.pop(posicion)
+            self.acciones_tomadas.apilar((cancion, self.REMOVIDA))
             return True
-        except (TinyTagException, LookupError, OSError):
+        except (TinyTagException, LookupError, OSError) as e:
+            print(str(e))
             return False
 
     def deshacer_modificacion(self):
@@ -87,7 +85,7 @@ class ColaDeReproduccion:
                 self.remover_cancion(ultima_cancion.obtener_ruta())
                 self.acciones_deshechas.apilar((ultima_cancion, self.AGREGADA))
                 return True
-            self.agregar_cancion(ultima_cancion.obtener_ruta)
+            self.agregar_cancion(ultima_cancion.obtener_ruta())
             self.acciones_deshechas.apilar((ultima_cancion, self.REMOVIDA))
             return True
         except (ValueError, IndexError):
@@ -117,6 +115,7 @@ class ColaDeReproduccion:
         lista = []
         for i in range(0, n_canciones):
             lista.append(self.lista_canciones.get_elemento(self.actual + 1 + i))
+        return lista
 
     def __str__(self):
         return str(self.lista_canciones)

@@ -25,10 +25,9 @@ class ColaDeReproduccion:
         self.lista_canciones = lista
         self.acciones_tomadas = Pila()
         self.acciones_deshechas = Pila()
-        self.actual=0
+        self.actual = 0
         #self.ultima_accion = None
         #self.lista_canciones = lista_canciones
-
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 
@@ -43,7 +42,7 @@ class ColaDeReproduccion:
         o None si no hay mas canciones."""
         if self.lista_canciones.esta_vacia():
             return None
-        return self.lista_canciones.get_elemento(self.actual+1)
+        return self.lista_canciones.get_elemento(self.actual + 1)
 
     def cancion_anterior(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion anterior en la cola, 
@@ -51,7 +50,7 @@ class ColaDeReproduccion:
         #if self.lista_canciones.esta_vacia() or self.lista_canciones.ver_primero() == self.lista_canciones.ver_ultimo():
         if self.lista_canciones.esta_vacia():
             return None
-        return self.lista_canciones.get_elemento(self.actual-1)
+        return self.lista_canciones.get_elemento(self.actual - 1)
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
@@ -73,7 +72,7 @@ class ColaDeReproduccion:
             #desencolada = self.cola_canciones.desencolar()
             #self._aux.apilar(desencolada)
             #self.ultima_accion = self.REMOVIDA
-            posicion=self.lista_canciones.index(cancion)
+            posicion = self.lista_canciones.index(cancion)
             self.lista_canciones.pop(posicion)
             return True
         except (TinyTagException, LookupError, OSError):
@@ -83,8 +82,8 @@ class ColaDeReproduccion:
         """ Deshace la ultima accion realizada. Devuelve True si pudo deshacerse, False en caso 
         contrario."""
         try:
-            ultima_cancion, ultima_accion=self.acciones_tomadas.desapilar()
-            if ultima_accion==self.AGREGADA:
+            ultima_cancion, ultima_accion = self.acciones_tomadas.desapilar()
+            if ultima_accion == self.AGREGADA:
                 self.remover_cancion(ultima_cancion.obtener_ruta())
                 self.acciones_deshechas.apilar((ultima_cancion, self.AGREGADA))
                 return True
@@ -98,8 +97,8 @@ class ColaDeReproduccion:
         """ Rehace la ultima accion que se deshizo. Devuelve True si pudo rehacerse, False en caso 
         contrario."""
         try:
-            ultima_cancion, ultima_accion=self.acciones_deshechas.desapilar()
-            if ultima_accion==self.AGREGADA:
+            ultima_cancion, ultima_accion = self.acciones_deshechas.desapilar()
+            if ultima_accion == self.AGREGADA:
                 self.agregar_cancion(ultima_cancion.obtener_ruta())
                 self.acciones_tomadas.apilar((ultima_cancion, self.AGREGADA))
                 return True
@@ -115,9 +114,9 @@ class ColaDeReproduccion:
         pedidos."""
         if self.lista_canciones.esta_vacia():
             return None
-        lista=[]
+        lista = []
         for i in range(0, n_canciones):
-            lista.append(self.lista_canciones.get_elemento(self.actual+1+i))
+            lista.append(self.lista_canciones.get_elemento(self.actual + 1 + i))
 
     def __str__(self):
         return str(self.lista_canciones)

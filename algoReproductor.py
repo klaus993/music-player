@@ -14,7 +14,16 @@ def agregar_canciones(cola, ruta_directorio):
     """ Agrega a la cola las canciones que se encuentran en el directorio y en los directorios
     que se encuentran en el, recursivamente. Las extensiones aceptadas son las que se listan en 
     ColaDeReproduccion."""
-    raise NotImplementedError()
+    # cola = ColaDeReproduccion()
+    directorio_actual = os.listdir(ruta_directorio)
+    # AA.VECES += 1
+    if not directorio_actual:       # verifica que no esté vacío el directorio actual
+        return
+    for archivo in directorio_actual:
+        if os.path.isdir('{}/{}'.format(ruta_directorio, archivo)):
+            agregar_canciones(cola, '{}/{}'.format(ruta_directorio, archivo))
+        if archivo.endswith(EXTENSIONES_ACEPTADAS):
+            cola.agregar_cancion('{}/{}'.format(ruta_directorio, archivo))
 
 
 def main():

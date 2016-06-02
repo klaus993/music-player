@@ -24,6 +24,7 @@ class ColaDeReproduccion:
             lista.insert(cancion)
         self.lista_canciones = lista
         self.acciones_tomadas = Pila()
+        self.acciones_deshechas = Pila()
         self.actual=0
         #self.ultima_accion = None
         #self.lista_canciones = lista_canciones
@@ -59,7 +60,7 @@ class ColaDeReproduccion:
             cancion = Cancion(ruta_cancion)
             self.lista_canciones.insert(cancion)
             #self.ultima_accion = self.AGREGADA
-            self.acciones_tomadas.apilar((cancion, AGREGADA))
+            self.acciones_tomadas.apilar((cancion, self.AGREGADA))
             return True
         except (TinyTagException, LookupError, OSError):
             return False
@@ -81,15 +82,42 @@ class ColaDeReproduccion:
     def deshacer_modificacion(self):
         """ Deshace la ultima accion realizada. Devuelve True si pudo deshacerse, False en caso 
         contrario."""
-        raise NotImplementedError()
+        try:
+            ultima_cancion, ultima_accion=self.acciones_tomadas.desapilar()
+            if ultima_accion==self.AGREGADA:
+                self.remover_cancion(ultima_cancion.obtener_ruta())
+                self.acciones_deshechas.apilar((ultima_cancion, self.AGREGADA))
+                return True
+            self.agregar_cancion(ultima_cancion.obtener_ruta)
+            self.acciones_deshechas.apilar((ultima_cancion, self.REMOVIDA))
+            return True
+        except (ValueError, IndexError):
+            return False
 
     def rehacer_modificacion(self):
         """ Rehace la ultima accion que se deshizo. Devuelve True si pudo rehacerse, False en caso 
         contrario."""
-        raise NotImplementedError()
+        try:
+            ultima_cancion, ultima_accion=self.acciones_deshechas.desapilar()
+            if ultima_accion==self.AGREGADA:
+                self.agregar_cancion(ultima_cancion.obtener_ruta())
+                self.acciones_tomadas.apilar((ultima_cancion, self.AGREGADA))
+                return True
+            self.remover_cancion(ultima_cancion.obtener_ruta())
+            self.acciones_tomadas.apilar((ultima_cancion, self.REMOVIDA))
+            return True
+        except (ValueError, IndexError):
+            return False
 
     def obtener_n_siguientes(self, n_canciones):
         """ Devuelve una lista con las siguientes n canciones. Si en la cola de reproduccion 
         quedan menos canciones que las pedidas, la lista contendra menos elementos que los 
         pedidos."""
-        raise NotImplementedError()
+        if self.lista_canciones.esta_vacia():
+            return None
+        lista=[]
+        for i in range(0, n_canciones):
+            lista.append(self.lista_canciones.get_elemento(self.actual+1+i))
+
+    def __str__(self):
+        return str(self.lista_canciones)

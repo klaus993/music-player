@@ -50,7 +50,7 @@ class ColaDeReproduccion:
         #if self.lista_canciones.esta_vacia() or self.lista_canciones.ver_primero() == self.lista_canciones.ver_ultimo():
         if self.lista_canciones.esta_vacia():
             return None
-        return self.lista_canciones.get_elemento(self.actual+1)
+        return self.lista_canciones.get_elemento(self.actual-1)
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
@@ -77,7 +77,6 @@ class ColaDeReproduccion:
             return True
         except (TinyTagException, LookupError, OSError):
             return False
-        raise NotImplementedError()
 
     def deshacer_modificacion(self):
         """ Deshace la ultima accion realizada. Devuelve True si pudo deshacerse, False en caso 

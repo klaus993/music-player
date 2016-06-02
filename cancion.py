@@ -29,3 +29,9 @@ class Cancion:
     def obtener_artista(self):
         """ Devuelve el artista de la cancion."""
         return self.artista
+
+    def __eq__(self, otro):
+        return self.ruta==otro.ruta
+        
+    def __str__(self):
+        return self.titulo

@@ -26,8 +26,6 @@ class ColaDeReproduccion:
         self.acciones_tomadas = Pila()
         self.acciones_deshechas = Pila()
         self.actual = 0
-        #self.ultima_accion = None
-        #self.lista_canciones = lista_canciones
 
     def cancion_actual(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion actual, o None si no 
@@ -133,17 +131,20 @@ class ColaDeReproduccion:
         return str(self.lista_canciones)
 
     def guardar_accion(self, ruta_cancion, accion):
+        """Guarda la accion como una tupla (ruta_cancion, accion)."""
         self.acciones_tomadas.apilar((ruta_cancion, accion))
     
     def agregar_cancion_sin_guardar(self, ruta_cancion):
+        """Agrega la cancion a la lista de reproduccion."""
         cancion = Cancion(ruta_cancion)
         self.lista_canciones.insert(cancion)
 
     def remover_cancion_sin_guardar(self, ruta_cancion):
+        """Remueve la cancion de la lista de reproduccion.
+        Devuelve True en caso que sea exitoso y False en caso contrario."""
         cancion = Cancion(ruta_cancion)
         posicion = self.lista_canciones.index(cancion)
         if posicion:
             self.lista_canciones.pop(posicion)
             return True
         return False
-

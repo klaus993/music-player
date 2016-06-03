@@ -9,7 +9,6 @@ class Cancion:
         # Usar TinyTag para obtener la informacion de la cancion, sobreescribir con lo pasado por 
         # parametro solo si la informacion no se encuentra disponible
         self.ruta = ruta
-        # try:
         tag = TinyTag.get(ruta)
         get_titulo = tag.title
         get_artista = tag.artist
@@ -21,10 +20,6 @@ class Cancion:
             self.artista = tag.artist
         else:
             self.artista = artista
-        # except (TinyTagException, LookupError, OSError) as e:
-        #     print("Error: " + str(e))
-        #     self.titulo = titulo
-        #     self.artista = artista
 
     def obtener_ruta(self):
         """ Devuelve la ruta del archivo de la cancion."""
@@ -39,10 +34,13 @@ class Cancion:
         return self.artista
 
     def __eq__(self, otro):
-        return self.titulo == otro.titulo
+        """Devuelve True si la ruta de las canciones son iguales y False en caso contrario."""
+        return self.ruta == otro.ruta
 
     def __str__(self):
+        """Devuelve una cadena con una representación de la cancion."""
         return self.titulo
     
     def __repr__(self):
+        """Devuelve una cadena con una representación de la cancion."""
         return self.titulo

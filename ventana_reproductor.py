@@ -98,7 +98,10 @@ class VentanaReproductor(pyglet.window.Window):
         elif symbol == key.ESCAPE:
             self.dispatch_event("on_close")
         elif symbol == key.V and modifiers & key.MOD_CTRL:
-            self.texto_ruta.escribir(pyperclip.paste())
+            try:
+                self.texto_ruta.escribir(pyperclip.paste())
+            except pyperclip.exceptions.PyperclipException:
+                pass
         self.actualizar()
 
     def on_close(self):

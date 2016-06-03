@@ -2,11 +2,14 @@ from nodo import _Nodo
 
 
 class _IteradorListaEnlazada:
+    """Modela el iterador de una lista enlazada."""
 
     def __init__(self, prim):
+        """Constructor del iterador de la lista enlazada."""
         self.actual = prim
 
     def __next__(self):
+        """Método para avanzar en el iterador."""
         if self.actual is None:
             raise StopIteration()
         dato = self.actual.dato
@@ -15,10 +18,10 @@ class _IteradorListaEnlazada:
 
 
 class ListaEnlazada:
+    """Modela una lista enlazada."""
 
     def __init__(self):
-        """Crea una lista enlazada vacía.
-        """
+        """Crea una lista enlazada vacía."""
         # referencia al primer nodo (None si la lista está vacía)
         self.prim = None
         # cantidad de elementos de la lista
@@ -116,7 +119,3 @@ class ListaEnlazada:
             if nodo == x:
                 return i
             i += 1
-
-    def eliminar_nodo(self, x):
-        """Recibe un elemento x y elimina la última aparición del elemnto en la lista"""
-        pass

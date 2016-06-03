@@ -7,7 +7,6 @@ import pyglet
 from ventana_reproductor import VentanaReproductor
 from reproductor import Reproductor
 from cola_reproduccion import ColaDeReproduccion, EXTENSIONES_ACEPTADAS
-from cancion import Cancion
 
 
 def agregar_canciones(cola, ruta_directorio):

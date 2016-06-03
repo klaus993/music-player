@@ -2,13 +2,14 @@ import pyglet
 from pyglet.window import key
 import pyperclip
 
+
 class VentanaReproductor(pyglet.window.Window):
     """ Ventana del reproductor, que permite controlarlo, modificar la cola de reproduccion y 
     muestra la informacion de la cancion actual."""
 
     # Altura de los labels, util para calcular la posición de los mismos cuando hay varios juntos
     ALTURA_LABELS = 20
-    
+
     MENSAJE_AGREGADA = "Cancion agregada a la cola de reproducción con exito"
     MENSAJE_REMOVIDA = "Cancion removida de la cola de reproducción con exito"
     MENSAJE_DESHECHO = "Se deshizo la modificación"
@@ -134,11 +135,11 @@ class VentanaReproductor(pyglet.window.Window):
     def on_text_motion(self, motion):
         if self.focus:
             self.focus.cursor.on_text_motion(motion)
-      
+
     def on_text_motion_select(self, motion):
         if self.focus:
             self.focus.cursor.on_text_motion_select(motion)
-        
+
     def hacer_foco(self, focus):
         if self.focus:
             self.focus.cursor.visible = False
@@ -149,6 +150,7 @@ class VentanaReproductor(pyglet.window.Window):
             self.focus.cursor.visible = True
             self.focus.cursor.mark = 0
             self.focus.cursor.position = len(self.focus.documento.text)
+
 
 class WidgetTexto():
     """ Widget que permite usar un cuadro de texto, y obtener el contenido ingresado."""
@@ -182,7 +184,8 @@ class WidgetTexto():
         return (0 < x - self.layout.x < self.layout.width and 0 < y - self.layout.y < self.layout.height)
 
     def escribir(self, texto):
-        self.documento.text+=texto
+        self.documento.text += texto
+
 
 class WidgetColaReproduccion():
     """ Widget que lista las proximas canciones de la cola de reproduccion, mostrandolas como 
@@ -190,7 +193,7 @@ class WidgetColaReproduccion():
 
     # Numero de canciones a mostrar como maximo
     CANTIDAD_CANCIONES_MOSTRADAS = 10
-    
+
     def __init__(self, cola_de_reproduccion, x, y):
         """ x e y indican la posicion del widget y cola_de_reproduccion una ColaDeReproduccion de 
         la que se quiere mostrar la informacion de las canciones."""
@@ -205,10 +208,10 @@ class WidgetColaReproduccion():
 
     def dibujar(self):
         """ Dibuja la lista de canciones de la cola de reproduccion en la pantalla."""
-        i=0
+        i = 0
         if not self.lista_cola_reproduccion:
             return
         for cancion in self.lista_cola_reproduccion:
-            label = pyglet.text.Label(cancion.obtener_titulo(), x=self.x, y=self.y+i)
+            label = pyglet.text.Label(cancion.obtener_titulo(), x=self.x, y=self.y + i)
             label.draw()
-            i-=20
+            i -= 20

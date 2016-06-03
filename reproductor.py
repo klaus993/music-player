@@ -1,5 +1,4 @@
 import pyglet.media as media
-from cola_reproduccion import ColaDeReproduccion
 
 
 class Reproductor(media.Player):

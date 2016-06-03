@@ -1,4 +1,4 @@
-from tinytag import TinyTag, TinyTagException
+from tinytag import TinyTag
 
 
 class Cancion:
@@ -40,7 +40,7 @@ class Cancion:
     def __str__(self):
         """Devuelve una cadena con una representación de la cancion."""
         return self.titulo
-    
+
     def __repr__(self):
         """Devuelve una cadena con una representación de la cancion."""
         return self.titulo

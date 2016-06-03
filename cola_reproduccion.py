@@ -1,6 +1,5 @@
-import os
-from cancion import Cancion, TinyTagException
-from cola import Cola
+from cancion import Cancion
+from tinytag import TinyTagException
 from pila import Pila
 from lista_enlazada import ListaEnlazada
 
@@ -33,7 +32,7 @@ class ColaDeReproduccion:
         if self.lista_canciones.esta_vacia():
             return None
         try:
-            cancion=self.lista_canciones.get_elemento(self.actual)
+            cancion = self.lista_canciones.get_elemento(self.actual)
         except IndexError:
             return
         return cancion
@@ -44,7 +43,7 @@ class ColaDeReproduccion:
         if len(self.lista_canciones) < 1:
             return None
         try:
-            cancion=self.lista_canciones.get_elemento(self.actual+1)
+            cancion = self.lista_canciones.get_elemento(self.actual + 1)
             self.actual += 1
         except IndexError:
             return
@@ -56,9 +55,9 @@ class ColaDeReproduccion:
         if len(self.lista_canciones) < 1:
             return None
         try:
-            cancion=self.lista_canciones.get_elemento(self.actual-1)
+            cancion = self.lista_canciones.get_elemento(self.actual - 1)
             self.actual -= 1
-        except IndexError: #No hay cancion anterior
+        except IndexError:      #No hay cancion anterior
             return
         return cancion
 
@@ -76,11 +75,10 @@ class ColaDeReproduccion:
         """ Remueve una Cancion de la cola a partir de su ruta. Devuelve True si se removio 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
         try:
-            resultado=self.remover_cancion_sin_guardar(ruta_cancion)
+            resultado = self.remover_cancion_sin_guardar(ruta_cancion)
             self.guardar_accion(ruta_cancion, self.REMOVIDA)
             return resultado
-        except (TinyTagException, LookupError, OSError) as e:
-            print(str(e))
+        except (TinyTagException, LookupError, OSError):
             return False
 
     def deshacer_modificacion(self):
@@ -133,7 +131,7 @@ class ColaDeReproduccion:
     def guardar_accion(self, ruta_cancion, accion):
         """Guarda la accion como una tupla (ruta_cancion, accion)."""
         self.acciones_tomadas.apilar((ruta_cancion, accion))
-    
+
     def agregar_cancion_sin_guardar(self, ruta_cancion):
         """Agrega la cancion a la lista de reproduccion."""
         cancion = Cancion(ruta_cancion)

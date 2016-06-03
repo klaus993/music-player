@@ -22,3 +22,9 @@ lista.agregar_cancion(RUTA_CANCION)
 lista.deshacer_modificacion()
 lista.rehacer_modificacion()
 print(lista)
+
+
+'''
+cola = ColaDeReproduccion()
+agregar_canciones(cola, '/usr/share/sounds/alsa')
+'''

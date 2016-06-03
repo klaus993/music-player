@@ -34,23 +34,23 @@ class ColaDeReproduccion:
         hay canciones cargadas en la cola."""
         if self.lista_canciones.esta_vacia():
             return None
-        #return self.cola_canciones.ver_primero()
         return self.lista_canciones.get_elemento(self.actual)
 
     def cancion_siguiente(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion siguiente en la cola, 
         o None si no hay mas canciones."""
-        if self.lista_canciones.esta_vacia():
+        if len(self.lista_canciones) < 1:
             return None
-        return self.lista_canciones.get_elemento(self.actual + 1)
+        self.actual += 1
+        return self.lista_canciones.get_elemento(self.actual)
 
     def cancion_anterior(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion anterior en la cola, 
         o None si no hay canciones en la misma o la actual es la primera de la cola."""
-        #if self.lista_canciones.esta_vacia() or self.lista_canciones.ver_primero() == self.lista_canciones.ver_ultimo():
-        if self.lista_canciones.esta_vacia():
+        if len(self.lista_canciones) < 1:
             return None
-        return self.lista_canciones.get_elemento(self.actual - 1)
+        self.actual -= 1
+        return self.lista_canciones.get_elemento(self.actual)
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
@@ -113,8 +113,11 @@ class ColaDeReproduccion:
         if self.lista_canciones.esta_vacia():
             return None
         lista = []
-        for i in range(0, n_canciones):
-            lista.append(self.lista_canciones.get_elemento(self.actual + 1 + i))
+        for i in range(n_canciones):
+            try:
+                lista.append(self.lista_canciones.get_elemento(self.actual + 1 + i))
+            except IndexError:
+                return lista
         return lista
 
     def __str__(self):

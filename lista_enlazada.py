@@ -116,3 +116,7 @@ class ListaEnlazada:
             if nodo == x:
                 return i
             i += 1
+
+    def eliminar_nodo(self, x):
+        """Recibe un elemento x y elimina la última aparición del elemnto en la lista"""
+        pass

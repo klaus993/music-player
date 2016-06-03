@@ -203,7 +203,9 @@ class WidgetColaReproduccion():
     def dibujar(self):
         """ Dibuja la lista de canciones de la cola de reproduccion en la pantalla."""
         i=0
+        if not self.lista_cola_reproduccion:
+            return
         for cancion in self.lista_cola_reproduccion:
             label = pyglet.text.Label(cancion.obtener_titulo(), x=self.x, y=self.y+i)
-            label.draw() #'<font face="Times New Roman" size="4">Hello, <i>world</i></font>'
+            label.draw()
             i-=20

@@ -34,7 +34,11 @@ class ColaDeReproduccion:
         hay canciones cargadas en la cola."""
         if self.lista_canciones.esta_vacia():
             return None
-        return self.lista_canciones.get_elemento(self.actual)
+        try:
+            cancion=self.lista_canciones.get_elemento(self.actual)
+        except IndexError:
+            return
+        return cancion
 
     def cancion_siguiente(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion siguiente en la cola, 
@@ -58,15 +62,14 @@ class ColaDeReproduccion:
             self.actual -= 1
         except IndexError: #No hay cancion anterior
             return
-        return cancion 
+        return cancion
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
         try:
-            cancion = Cancion(ruta_cancion)
-            self.lista_canciones.insert(cancion)
-            self.acciones_tomadas.apilar((cancion, self.AGREGADA))
+            self.agregar_cancion_sin_guardar(ruta_cancion)
+            self.guardar_accion(ruta_cancion, self.AGREGADA)
             return True
         except (TinyTagException, LookupError, OSError):
             return False
@@ -75,11 +78,9 @@ class ColaDeReproduccion:
         """ Remueve una Cancion de la cola a partir de su ruta. Devuelve True si se removio 
         correctamente, False en caso contrario. Esta accion puede deshacerse y rehacerse."""
         try:
-            cancion = Cancion(ruta_cancion)
-            posicion = self.lista_canciones.index(cancion)
-            self.lista_canciones.pop(posicion)
-            self.acciones_tomadas.apilar((cancion, self.REMOVIDA))
-            return True
+            resultado=self.remover_cancion_sin_guardar(ruta_cancion)
+            self.guardar_accion(ruta_cancion, self.REMOVIDA)
+            return resultado
         except (TinyTagException, LookupError, OSError) as e:
             print(str(e))
             return False
@@ -88,13 +89,13 @@ class ColaDeReproduccion:
         """ Deshace la ultima accion realizada. Devuelve True si pudo deshacerse, False en caso 
         contrario."""
         try:
-            ultima_cancion, ultima_accion = self.acciones_tomadas.desapilar()
+            ruta_ultima_cancion, ultima_accion = self.acciones_tomadas.desapilar()
             if ultima_accion == self.AGREGADA:
-                self.remover_cancion(ultima_cancion.obtener_ruta())
-                self.acciones_deshechas.apilar((ultima_cancion, self.AGREGADA))
+                self.remover_cancion_sin_guardar(ruta_ultima_cancion)
+                self.acciones_deshechas.apilar((ruta_ultima_cancion, self.AGREGADA))
                 return True
-            self.agregar_cancion(ultima_cancion.obtener_ruta())
-            self.acciones_deshechas.apilar((ultima_cancion, self.REMOVIDA))
+            self.agregar_cancion_sin_guardar(ruta_ultima_cancion)
+            self.acciones_deshechas.apilar((ruta_ultima_cancion, self.REMOVIDA))
             return True
         except (ValueError, IndexError):
             return False
@@ -103,13 +104,13 @@ class ColaDeReproduccion:
         """ Rehace la ultima accion que se deshizo. Devuelve True si pudo rehacerse, False en caso 
         contrario."""
         try:
-            ultima_cancion, ultima_accion = self.acciones_deshechas.desapilar()
+            ruta_ultima_cancion, ultima_accion = self.acciones_deshechas.desapilar()
             if ultima_accion == self.AGREGADA:
-                self.agregar_cancion(ultima_cancion.obtener_ruta())
-                self.acciones_tomadas.apilar((ultima_cancion, self.AGREGADA))
+                self.agregar_cancion_sin_guardar(ruta_ultima_cancion)
+                self.acciones_tomadas.apilar((ruta_ultima_cancion, self.AGREGADA))
                 return True
-            self.remover_cancion(ultima_cancion.obtener_ruta())
-            self.acciones_tomadas.apilar((ultima_cancion, self.REMOVIDA))
+            self.remover_cancion_sin_guardar(ruta_ultima_cancion)
+            self.acciones_tomadas.apilar((ruta_ultima_cancion, self.REMOVIDA))
             return True
         except (ValueError, IndexError):
             return False
@@ -130,3 +131,19 @@ class ColaDeReproduccion:
 
     def __str__(self):
         return str(self.lista_canciones)
+
+    def guardar_accion(self, ruta_cancion, accion):
+        self.acciones_tomadas.apilar((ruta_cancion, accion))
+    
+    def agregar_cancion_sin_guardar(self, ruta_cancion):
+        cancion = Cancion(ruta_cancion)
+        self.lista_canciones.insert(cancion)
+
+    def remover_cancion_sin_guardar(self, ruta_cancion):
+        cancion = Cancion(ruta_cancion)
+        posicion = self.lista_canciones.index(cancion)
+        if posicion:
+            self.lista_canciones.pop(posicion)
+            return True
+        return False
+

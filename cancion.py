@@ -39,7 +39,7 @@ class Cancion:
         return self.artista
 
     def __eq__(self, otro):
-        return self.ruta == otro.ruta
+        return self.titulo == otro.titulo
 
     def __str__(self):
         return self.titulo

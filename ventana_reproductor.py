@@ -1,7 +1,7 @@
 import pyglet
 from pyglet.window import key
-#comentario test seblaz
-#comentario prueba smartgit
+import pyperclip
+
 class VentanaReproductor(pyglet.window.Window):
     """ Ventana del reproductor, que permite controlarlo, modificar la cola de reproduccion y 
     muestra la informacion de la cancion actual."""
@@ -97,6 +97,8 @@ class VentanaReproductor(pyglet.window.Window):
             self.label_modificado.text = self.MENSAJE_REHECHO if redo else self.MENSAJE_FALLO_MODIFICACION
         elif symbol == key.ESCAPE:
             self.dispatch_event("on_close")
+        elif symbol == key.V and modifiers & key.MOD_CTRL:
+            self.texto_ruta.escribir(pyperclip.paste())
         self.actualizar()
 
     def on_close(self):
@@ -176,6 +178,9 @@ class WidgetTexto():
         """ Devuelve True si la posicion (x,y) dada se encuentra dentro del espacio del widget."""
         return (0 < x - self.layout.x < self.layout.width and 0 < y - self.layout.y < self.layout.height)
 
+    def escribir(self, texto):
+        self.documento.text+=texto
+
 class WidgetColaReproduccion():
     """ Widget que lista las proximas canciones de la cola de reproduccion, mostrandolas como 
     "titulo - artista"."""
@@ -186,12 +191,19 @@ class WidgetColaReproduccion():
     def __init__(self, cola_de_reproduccion, x, y):
         """ x e y indican la posicion del widget y cola_de_reproduccion una ColaDeReproduccion de 
         la que se quiere mostrar la informacion de las canciones."""
-        raise NotImplementedError()
+        self.x = x
+        self.y = y
+        self.cola_de_reproduccion = cola_de_reproduccion
+        self.lista_cola_reproduccion = cola_de_reproduccion.obtener_n_siguientes(self.CANTIDAD_CANCIONES_MOSTRADAS)
 
     def actualizar(self):
         """ Actualiza la informacion de las canciones de la cola de reproduccion que se muestran en el widget."""
-        raise NotImplementedError()
+        self.lista_cola_reproduccion = self.cola_de_reproduccion.obtener_n_siguientes(self.CANTIDAD_CANCIONES_MOSTRADAS)
 
     def dibujar(self):
         """ Dibuja la lista de canciones de la cola de reproduccion en la pantalla."""
-        raise NotImplementedError()
+        i=0
+        for cancion in self.lista_cola_reproduccion:
+            label = pyglet.text.Label(cancion.obtener_titulo(), x=self.x, y=self.y+i)
+            label.draw() #'<font face="Times New Roman" size="4">Hello, <i>world</i></font>'
+            i-=20

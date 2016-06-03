@@ -101,7 +101,7 @@ class ListaEnlazada:
         if i == 0:
             return self.prim.dato
         nodo = self.prim
-        for pos in range(1, i):
+        for pos in range(0, i):
             nodo = nodo.prox
         return nodo.dato
 

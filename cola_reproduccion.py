@@ -41,16 +41,24 @@ class ColaDeReproduccion:
         o None si no hay mas canciones."""
         if len(self.lista_canciones) < 1:
             return None
-        self.actual += 1
-        return self.lista_canciones.get_elemento(self.actual)
+        try:
+            cancion=self.lista_canciones.get_elemento(self.actual+1)
+            self.actual += 1
+        except IndexError:
+            return
+        return cancion
 
     def cancion_anterior(self):
         """ Devuelve un objeto de clase Cancion que corresponde a la cancion anterior en la cola, 
         o None si no hay canciones en la misma o la actual es la primera de la cola."""
         if len(self.lista_canciones) < 1:
             return None
-        self.actual -= 1
-        return self.lista_canciones.get_elemento(self.actual)
+        try:
+            cancion=self.lista_canciones.get_elemento(self.actual-1)
+            self.actual -= 1
+        except IndexError: #No hay cancion anterior
+            return
+        return cancion 
 
     def agregar_cancion(self, ruta_cancion):
         """ Agrega una Cancion a la cola a partir de su ruta. Devuelve True si se agrego 

@@ -43,3 +43,6 @@ class Cancion:
 
     def __str__(self):
         return self.titulo
+    
+    def __repr__(self):
+        return self.titulo
